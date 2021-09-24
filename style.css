@@ -1,0 +1,10 @@
+.container {
+  width: 700px;
+  margin: 0 auto ;
+}
+
+p {
+  color: #fff;
+  font-size: 35px;
+  text-align: center;
+}
