@@ -8,3 +8,14 @@ p {
   font-size: 35px;
   text-align: center;
 }
+
+.btn,
+.btn-delete {
+  width: 200px;
+  height: 50px;
+  border: 1px solid #333333;
+  border-radius: 8px;
+  text-transform: uppercase;
+  background-color: greenyellow;
+  cursor: pointer;
+}
