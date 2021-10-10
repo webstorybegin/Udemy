@@ -2,76 +2,96 @@
 
 "use strict";
 
-// let numberOfFilms;
-
-// function start() {
-//   numberOfFilms = +prompt("Сколько фильмов вы уже посмотрели?", "");
-
-//   while (numberOfFilms == "" || numberOfFilms == null || isNaN(numberOfFilms)) {
-//     numberOfFilms = +prompt("Сколько фильмов вы уже посмотрели?", "");
-//   }
-// }
-
-// start();
+// const btn = document.querySelector('.btn');
 
 // const personalMovieDB = {
-//   count: numberOfFilms,
+//   count: 0,
 //   movies: {},
 //   actors: {},
 //   genres: [],
 //   privat: false,
+//   start: function () {
+//     personalMovieDB.count = +prompt("Сколько фильмов вы уже посмотрели?", "");
+
+//     while (
+//       personalMovieDB.count == "" ||
+//       personalMovieDB.count == null ||
+//       isNaN(personalMovieDB.count)
+//     ) {
+//       personalMovieDB.count = +prompt("Сколько фильмов вы уже посмотрели?", "");
+//     }
+//   },
+//   rememberMyFilms: function () {
+//     for (let i = 0; i < 2; i++) {
+//       const a = prompt("Один из последних просмотренных фильмов?", ""),
+//         b = prompt("На сколько оцените его?", "");
+
+//       if (a != null && b != null && a != "" && b != "" && a.length < 50) {
+//         personalMovieDB.movies[a] = b;
+//         console.log("done");
+//       } else {
+//         console.log("error");
+//         i--;
+//       }
+//     }
+//   },
+//   detectPersonalLevel: function () {
+//     if (personalMovieDB.count < 10) {
+//       console.log("Просмотрено довольно мало фильмов");
+//     } else if (personalMovieDB.count >= 10 && personalMovieDB.count < 30) {
+//       console.log("Вы классический зритель");
+//     } else if (personalMovieDB.count >= 30) {
+//       console.log("Вы киноман");
+//     } else {
+//       console.log("Произошла ошибка");
+//     }
+//   },
+//   showMyDB: function (hidden) {
+//     if (!hidden) {
+//       console.log(personalMovieDB);
+//     }
+//   },
+//   toggleVisibleMyDB: function () {
+//     if (personalMovieDB.privat) {
+//       personalMovieDB.privat = false;
+//     } else {
+//       personalMovieDB.privat = true;
+//     }
+//   },
+//   writeYourGenres: function () {
+//     for (let i = 1; i < 2; i++) {
+//       let genre = prompt(`Ваш любимый жанр под номером ${i}`);
+
+//       if (genre === "" || genre == null) {
+//         console.log("Вы ввели некорректные данные или не ввели их вовсе");
+//         i--;
+//       } else {
+//         personalMovieDB.genres[i - 1] = genre;
+//       }
+
+//       // Альтернативный вариант из урока
+
+//       // let genres = prompt(`Введите ваши любимые жанры через запятую`).toLowerCase();
+
+//       // if (genres === '' || genres == null) {
+//       //     console.log('Вы ввели некорректные данные или не ввели их вовсе');
+//       //     i--;
+//       // } else {
+//       //     personalMovieDB.genres = genres.split(', ');
+//       //     personalMovieDB.genres.sort();
+//       // }
+//     }
+
+//     personalMovieDB.genres.forEach((item, i) => {
+//       console.log(`Любимый жанр ${i + 1} - это ${item}`);
+//     });
+//   },
 // };
 
-// function rememberMyFilms() {
-//   for (let i = 0; i < 2; i++) {
-//     const a = prompt("Один из последних просмотренных фильмов?", "");
-//     const b = prompt("На сколько оцените его?", "");
-
-//     if (a != null && b != null && a != "" && b != "" && a.length < 50) {
-//       personalMovieDB.movies[a] = b;
-//       console.log("done");
-//     } else {
-//       console.log("error");
-//       i--;
-//     }
-//   }
-// }
-
-// rememberMyFilms();
-
-// function detectPersonalLevel() {
-//   if (personalMovieDB.count < 10) {
-//     console.log("Просмотрено довольно мало фильмов");
-//   } else if (personalMovieDB.count >= 10 && personalMovieDB.count < 30) {
-//     console.log("Вы классический зритель");
-//   } else if (personalMovieDB.count >= 30) {
-//     console.log("Вы киноман");
-//   } else {
-//     console.log("Произошла ошибка");
-//   }
-// }
-
-// detectPersonalLevel();
-
-// function showMyDB(hidden) {
-//   if (!hidden) {
-//     console.log(personalMovieDB);
-//   }
-// }
-
-// showMyDB(personalMovieDB.privat);
-
-// function writeYourGenres() {
-//   for (let i = 1; i <= 3; i++) {
-//     personalMovieDB.genres[i - 1] = prompt(`Ваш любимый жанр под номером ${i}`);
-//   }
-// }
-
-// writeYourGenres();
-
-// for (let key in personalMovieDB) {
-//   console.log(`База данных имеет свойства ${key}`);
-// }
+// btn.addEventListener('click', function(e) {
+//   e.preventDefault();
+//   personalMovieDB.rememberMyFilms();
+// })
 
 ///////////////////////////////////////////// 13 условия
 
@@ -289,3 +309,203 @@ switch (num) {
 // for (let value of newArray) {
 //   console.log(value)
 // }
+
+///////////////////////////////////////////// 22 Передача по ссылке или по значению, Spread оператор (ES6-ES9)
+
+// let a = 5,
+//     b = a;
+
+// b = b + 5;
+
+// console.log(b)
+
+// const obj = {
+//   a: 5,
+//   b: 1
+// }
+
+// const copy = obj;
+
+// copy.a = 10;
+
+// console.log(copy);
+// console.log(obj);
+
+// function copy (mainObj) {
+//   let objCopy = {};
+//   let key;
+//   for (key in mainObj) {
+//     objCopy[key] = mainObj[key];
+//   }
+
+//   return objCopy;
+// };
+
+// const numbers = {
+//   a: 2,
+//   b: 5,
+//   c: {
+//     x: 7,
+//     y: 4
+//   }
+// };
+
+// const  newNumbers = copy(numbers)
+
+// newNumbers.a = 10;
+// newNumbers.c.x = 10;
+
+// const add = {
+//   d: 17,
+//   e: 20
+// };
+
+// const newArray = Object.assign(numbers, add);
+
+// console.log(JSON.stringify(newArray, null, 2))
+
+// const oldArray = ['a', 'b', 'c'];
+// const newArray = oldArray.slice()
+
+// newArray[1] = 'dasdasda';
+
+// console.log(newArray)
+// console.log(oldArray)
+
+// const video = ['youtube', 'twich', 'rutube'],
+//       blogs = ['wordpress', 'livejournal', 'blogger'],
+//       internet = [...video, ...blogs, 'vk', 'facebook'];
+
+// console.log(JSON.stringify(internet, null, 2));
+
+// function log (a, b, c) {
+//   console.log(a)
+//   console.log(b)
+//   console.log(c)
+// }
+
+// const num = [2, 5, 7];
+
+// log(...num)
+
+// const array = ['a', 'b'];
+
+// const newArr = [...array];
+
+// const q = {
+//   one: 1,
+//   two: 2,
+//   three: 3
+// }
+
+// const newObj = {...q};
+
+// console.log(JSON.stringify(newObj, null, 2))
+
+////////////////////////////////////////////////////////////////////////////////////////// 23 ООП
+
+// let str = 'some';
+// let strObj = new String(str);
+
+// console.log(typeof(str));
+// console.log(typeof(strObj));
+
+// console.dir([1, 2, 3])
+
+// const soldier = {
+//   health: 400,
+//   armor: 100,
+//   sayHello: function() {
+//     console.log('hello')
+//   }
+// };
+
+// const john = Object.create(soldier);
+// john.sayHello();
+
+// const bmw = {
+//   color: 'black',
+//   price: 1800,
+//   netto: 2,
+//   openDors: function() {
+//     console.log('DORS OPEN')
+//   }
+// }
+
+// const lada = {
+//   from: 'Ukraine'
+// }
+
+// const newCar = Object.setPrototypeOf(lada, bmw);
+
+// newCar.openDors();
+
+////////////////////////////////////////////////////////////////////// 26. Динамическая типизация в JS
+
+//////// STRING
+// 1)
+// console.log(typeof(String(null)));
+// console.log(typeof(String(4)));
+
+// // 2) 
+// console.log(typeof(5 + ''));
+
+// const num = 5;
+
+// console.log('https://vk.com/catalog/' + num);
+
+// const fontSize = 26 + 'px';
+
+// console.log(fontSize)
+
+// //////// NUMBER
+// // 1)
+// console.log(typeof(Number('4')));
+
+// // 2)
+// console.log(typeof(+'5'));
+
+// // 3)
+// console.log(typeof(parseInt('15px', 10)))
+
+// let answ = + prompt('Hello', '');
+
+//////// To Boolean
+//1)
+
+// 0, '', null, undefined, NaN; --> FALSE 
+                        // OTHER --> TRUE
+
+// 1)
+// let switcher;
+
+// if (switcher) {
+//   console.log('Working..');
+// }
+
+// // 2)
+
+// console.log(typeof(Boolean('4')));
+
+// // 3)
+
+// console.log(typeof(!!'4444'))
+
+//////////////////////// 27 ЗАДАЧКИ С СОБЕСЕДОВАНИЙ
+
+// console.log(2 && 1 && null && 0 && undefined);
+// /// И всегда запинается на лжи
+// /// ИЛИ запинается на правде
+// //                    3
+// console.log(null || 2 && 3 || 4)
+
+// console.log('Ежик' > 'яблоко')
+
+//////////////////////// 28 Получение элементов со страницы
+
+// const button = document.getElementById('button');
+// const buttons = document.getElementsByTagName('button');
+
+// console.log(button)
+
+// console.log(buttons[0])
