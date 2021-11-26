@@ -305,3 +305,22 @@ new MenuCard(
 // console.log(div.calcArea())
 // // const square = new Rectangle(10, 10);
 // // console.log(square.calcArea())
+
+
+
+//Глубокое клонирование
+
+const persone = {
+  name: 'Dmitrii',
+  phone: '+38090905215',
+  parents: {
+    dad: 'Vova',
+    mom: 'Lena'
+  }
+};
+
+const obj = JSON.parse(JSON.stringify(persone));
+
+obj.parents.mom = 'Ann';
+console.log(persone)
+console.log(obj)
