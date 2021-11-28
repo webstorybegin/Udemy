@@ -1,3 +1,5 @@
+// ПРОЕКТ
+
 let tabs = document.querySelectorAll(".tabheader__item"),
   tabsContent = document.querySelectorAll(".tabcontent"),
   tabsParent = document.querySelector(".tabheader__items"),
@@ -54,10 +56,8 @@ function showModal() {
 
 buttonModal.addEventListener("click", showModal);
 
-closeBtn.addEventListener("click", closeModal);
-
 modal.addEventListener("click", function (e) {
-  if (e.target === modal) {
+  if (e.target === modal || e.target === closeBtn) {
     closeModal();
     document.body.style.overflow = "hidden";
   }
@@ -158,7 +158,7 @@ new MenuCard(
 const forms = document.querySelectorAll("form");
 
 const message = {
-  loading: "Загрузка",
+  loading: "img/spinner.svg",
   success: "Спасибо, скоро мы с вами свяжемся",
   failure: "Что-то пошло не так...",
 };
@@ -171,41 +171,70 @@ function postData(form) {
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const statusMessage = document.createElement("div");
-    statusMessage.classList.add("status");
-    statusMessage.textContent = message.loading;
-    form.append(statusMessage);
+    const statusMessage = document.createElement("img");
+    statusMessage.src = message.loading;
+    statusMessage.style.cssText = `
+      display: block;
+      margin: 0 auto;
+    `;
+    form.insertAdjacentElement("afterend", statusMessage);
 
     const req = new XMLHttpRequest();
     req.open("POST", "server.php");
 
-    req.setRequestHeader('Content-type', 'application/json');
+    req.setRequestHeader("Content-type", "application/json");
     const formData = new FormData(form);
 
     const object = {};
-    formData.forEach(function(value, key) {
+    formData.forEach(function (value, key) {
       object[key] = value;
     });
 
-    const json = JSON.stringify(object, null, 2)
+    const json = JSON.stringify(object, null, 2);
 
     req.send(json);
 
     req.addEventListener("load", () => {
       if (req.status === 200) {
-        console.log(req.response)
-        statusMessage.textContent = message.success;
+        console.log(req.response);
+        showThanksModal(message.success);
         form.reset();
-        setTimeout(() => {
-          statusMessage.remove();
-        }, 2000)
+        statusMessage.remove();
       } else {
-        statusMessage.textContent = message.failure;
+        showThanksModal(message.failure);
       }
     });
   });
 }
 
+function showThanksModal(message) {
+  const prevModalDialog = document.querySelector(".modal__dialog");
+  prevModalDialog.classList.add("hide");
+  showModal();
+
+  const thanksModal = document.createElement("div");
+  thanksModal.classList.add("modal__dialog");
+  thanksModal.innerHTML = `
+    <div class="modal__content">
+      <div class="modal__close" data-close>
+        ×
+      </div>
+      <div class="modal__title">
+        ${message}
+      </div>
+    </div>
+  `;
+
+  document.querySelector(".modal").append(thanksModal);
+  setTimeout(() => {
+    thanksModal.remove();
+    prevModalDialog.classList.add("show");
+    prevModalDialog.classList.remove("hide");
+    closeModal();
+  }, 4000);
+}
+
+// ТЕОРИЯ
 
 // const log = function(a, b, ...rest) {
 //   console.log(a, b, rest)
@@ -371,3 +400,56 @@ function postData(form) {
 // obj.parents.mom = 'Ann';
 // console.log(persone)
 // console.log(obj)
+
+// console.log("Запрос данных...");
+
+// const req = new Promise((resolve, reject) => {
+//   setTimeout(() => {
+//     console.log("Подготовка данных...");
+
+//     const product = {
+//       name: "TV",
+//       price: 2000,
+//     };
+
+//     resolve(product);
+//   }, 2000);
+// });
+
+// req
+//   .then((product) => {
+//     return new Promise((resolve, reject) => {
+//       setTimeout(() => {
+//         product.status = "order";
+//         resolve(product);
+//       }, 2000);
+//     });
+//   })
+//   .then((data) => {
+//     data.modify = true;
+//     return data;
+//   })
+//   .then((data) => {
+//     console.log(data);
+//   }).catch(() => {
+//     console.error('Произошла ошибка')
+//   }).finally(() => {
+//     console.log('ВСЕ РАБОТАЕТ')
+//   });
+
+const test = time => {
+  return new Promise(resolve => {
+    setTimeout(() => resolve(), time)
+  })
+}
+
+// test(1000).then(() => console.log('1000'));
+// test(2000).then(() => console.log('2000'));
+
+Promise.all([test(1000), test(2000)]).then(() => {
+  console.log('All')
+})
+
+Promise.race([test(1000), test(2000)]).then(() => {
+  console.log("All");
+});
