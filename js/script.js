@@ -76,6 +76,7 @@ function showModalByScroll() {
   ) {
     showModal();
     window.removeEventListener("scroll", showModalByScroll);
+    document.body.style.overflow = "auto";
   }
 }
 
@@ -179,10 +180,6 @@ function postData(form) {
     `;
     form.insertAdjacentElement("afterend", statusMessage);
 
-    const req = new XMLHttpRequest();
-    req.open("POST", "server.php");
-
-    req.setRequestHeader("Content-type", "application/json");
     const formData = new FormData(form);
 
     const object = {};
@@ -190,20 +187,25 @@ function postData(form) {
       object[key] = value;
     });
 
-    const json = JSON.stringify(object, null, 2);
-
-    req.send(json);
-
-    req.addEventListener("load", () => {
-      if (req.status === 200) {
-        console.log(req.response);
+    fetch("server1.php", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(object, null, 2),
+    })
+      .then((data) => data.text())
+      .then((data) => {
+        console.log(data);
         showThanksModal(message.success);
-        form.reset();
         statusMessage.remove();
-      } else {
+      })
+      .catch(() => {
         showThanksModal(message.failure);
-      }
-    });
+      })
+      .finally(() => {
+        form.reset();
+      });
   });
 }
 
@@ -234,7 +236,7 @@ function showThanksModal(message) {
   }, 4000);
 }
 
-// ТЕОРИЯ
+///////////////////////////////////////////// ТЕОРИЯ
 
 // const log = function(a, b, ...rest) {
 //   console.log(a, b, rest)
@@ -247,8 +249,6 @@ function showThanksModal(message) {
 // }
 
 // calcOrDouble(3, 5)
-
-// window.addEventListener("scroll", showModalByScroll);
 
 // class Car {
 //   constructor(model, color, price, country) {
@@ -384,7 +384,7 @@ function showThanksModal(message) {
 // // const square = new Rectangle(10, 10);
 // // console.log(square.calcArea())
 
-//Глубокое клонирование
+//////////////////////////// Глубокое клонирование
 
 // const persone = {
 //   name: 'Dmitrii',
@@ -402,6 +402,8 @@ function showThanksModal(message) {
 // console.log(obj)
 
 // console.log("Запрос данных...");
+
+////////////////////////////////// Promise
 
 // const req = new Promise((resolve, reject) => {
 //   setTimeout(() => {
@@ -437,19 +439,91 @@ function showThanksModal(message) {
 //     console.log('ВСЕ РАБОТАЕТ')
 //   });
 
-const test = time => {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(), time)
-  })
-}
+// const test = time => {
+//   return new Promise(resolve => {
+//     setTimeout(() => resolve(), time)
+//   })
+// }
 
-// test(1000).then(() => console.log('1000'));
-// test(2000).then(() => console.log('2000'));
+// // test(1000).then(() => console.log('1000'));
+// // test(2000).then(() => console.log('2000'));
 
-Promise.all([test(1000), test(2000)]).then(() => {
-  console.log('All')
-})
+// Promise.all([test(1000), test(2000)]).then(() => {
+//   console.log('All')
+// })
 
-Promise.race([test(1000), test(2000)]).then(() => {
-  console.log("All");
-});
+// Promise.race([test(1000), test(2000)]).then(() => {
+//   console.log("All");
+// });
+
+////////////////////////////// API fake
+
+// fetch("https://jsonplaceholder.typicode.com/posts", {
+//   method: "POST",
+//   body: JSON.stringify({name: 'Dmitrii'}),
+//   headers: {
+//     'Content-type' : 'application/json'
+//   }
+// })
+//   .then((response) => response.json())
+//   .then((json) => console.log(json));
+
+/////////////////////////// переборы массивов
+
+// FILTER
+
+// const names = ['Dmitry,', 'Ivan', 'Ann', 'Ksenia', 'Voldemart'];
+
+// const shortNames = names.filter(function(name) {
+//   return name.length < 5;
+// });
+
+// console.log(shortNames)
+
+// MAP
+
+// const answers = ['IvAn', 'DmitrY', 'Hello'];
+
+// const result = answers.map(item => item.toLocaleLowerCase());
+
+// console.log(result)
+
+// EVERY / SOME
+
+// const some = [4, 'qwq', 'dasdasda'];
+
+// console.log(some.some(item => typeof(item) === 'number'))
+// console.log(some.every(item => typeof(item) === 'number'));
+
+// REDUCE
+
+// const arr = [4, 5, 1, 3, 2, 6];
+//                         // 0    4  *** optional understanding
+//                         // 4    5
+//                         // 9    1
+//                         // 10   3
+//                         // 13   2
+//                         // 15   6
+// const result = arr.reduce((sum, current) => sum + current, 3)
+// console.log(result)
+
+// const arr = ['apple', 'pear', 'plum'];
+
+// const result = arr.reduce((sum, current) => `${sum},  ${current}`)
+// console.log(result)
+
+
+// ENTRIES
+
+// const obj = {
+//   ivan: "persone",
+//   ann: "persone",
+//   dog: "animal",
+//   cat: "animal",
+// };
+
+// const newArr = Object.entries(obj)
+//   .filter((item) => item[1] === "persone")
+//   .map((item) => item[0]);
+
+// console.log(newArr);
