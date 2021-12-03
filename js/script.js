@@ -248,7 +248,7 @@ function showThanksModal(message) {
 // Slider
 
 const slides = document.querySelectorAll(".offer__slide");
-const slider = document.querySelector('.offer__slider');
+const slider = document.querySelector(".offer__slider");
 const prev = document.querySelector(".offer__slider-prev");
 const next = document.querySelector(".offer__slider-next");
 const current = document.querySelector("#current");
@@ -256,16 +256,16 @@ const total = document.querySelector("#total");
 const slidesWrapper = document.querySelector(".offer__slider-wrapper");
 const slidesField = document.querySelector(".offer__slider-inner");
 const widthSlides = window.getComputedStyle(slidesWrapper).width;
-const dots = document.createElement('ol');
+const dots = document.createElement("ol");
 const dotsArr = [];
 
-dots.classList.add('carousel-dots');
-slider.append(dots)
+dots.classList.add("carousel-dots");
+slider.append(dots);
 
 for (let i = 0; i < slides.length; i++) {
-  const dot = document.createElement('li');
-  dot.setAttribute('data-slide-to', i + 1);
-  dot.classList.add('dot');
+  const dot = document.createElement("li");
+  dot.setAttribute("data-slide-to", i + 1);
+  dot.classList.add("dot");
   if (i == 0) {
     dot.style.opacity = 1;
   }
@@ -284,13 +284,13 @@ if (slides.length < 10) {
   current.textContent = indexSlide;
 }
 
-slidesField.style.width = 100 * slides.length + '%';
+slidesField.style.width = 100 * slides.length + "%";
 slides.forEach((slide) => {
   slide.style.width = widthSlides;
 });
 
-function deleteDigits(string){
-  return +string.replace(/\D/g, '')
+function deleteDigits(string) {
+  return +string.replace(/\D/g, "");
 }
 
 prev.addEventListener("click", () => {
@@ -314,8 +314,8 @@ prev.addEventListener("click", () => {
     current.textContent = indexSlide;
   }
 
-  dotsArr.forEach(dot => dot.style.opacity = '.5');
-  dotsArr[indexSlide -1].style.opacity = 1;
+  dotsArr.forEach((dot) => (dot.style.opacity = ".5"));
+  dotsArr[indexSlide - 1].style.opacity = 1;
 });
 
 next.addEventListener("click", () => {
@@ -343,9 +343,9 @@ next.addEventListener("click", () => {
   dotsArr[indexSlide - 1].style.opacity = 1;
 });
 
-dotsArr.forEach(dot => {
-  dot.addEventListener('click', (e) => {
-    const slideTo = e.target.getAttribute('data-slide-to');
+dotsArr.forEach((dot) => {
+  dot.addEventListener("click", (e) => {
+    const slideTo = e.target.getAttribute("data-slide-to");
 
     indexSlide = slideTo;
 
@@ -359,8 +359,125 @@ dotsArr.forEach(dot => {
 
     dotsArr.forEach((dot) => (dot.style.opacity = ".5"));
     dotsArr[indexSlide - 1].style.opacity = 1;
-  })
-}) 
+  });
+});
+
+// CALCULATOR
+
+const result = document.querySelector(".calculating__result span");
+
+let sex, height, weight, age, ratio;
+
+if (localStorage.getItem("sex")) {
+  sex = localStorage.getItem("sex");
+} else {
+  sex = "female";
+  localStorage.setItem("sex", "female");
+}
+
+if (localStorage.getItem("ratio")) {
+  ratio = localStorage.getItem("ratio");
+} else {
+  ratio = 1.375;
+  localStorage.setItem("ratio", 1.375);
+}
+
+function calcTotal() {
+  if (!sex || !height || !weight || !age || !ratio) {
+    result.textContent = "____";
+    return;
+  }
+  if (sex === "female") {
+    result.textContent = Math.round(
+      (447.6 + 9.2 * weight + 3.1 * height - 4.3 * age) * ratio
+    );
+  } else {
+    result.textContent = Math.round(
+      (88.36 + 13.4 * weight + 4.8 * height - 5.7 * age) * ratio
+    );
+  }
+}
+
+calcTotal();
+
+function initLocalSettings(selector, activeClass) {
+  const elements = document.querySelectorAll(selector);
+
+  elements.forEach((elem) => {
+    elem.classList.remove(activeClass);
+    if (elem.getAttribute("id") === localStorage.getItem("sex")) {
+      elem.classList.add(activeClass);
+    }
+    if (elem.getAttribute("data-ratio") === localStorage.getItem("ratio")) {
+      elem.classList.add(activeClass);
+    }
+  });
+}
+
+initLocalSettings("#gender div", "calculating__choose-item_active");
+initLocalSettings(
+  ".calculating__choose_big div",
+  "calculating__choose-item_active"
+);
+
+function getStaticInformation(selector, activeClass) {
+  const elements = document.querySelectorAll(selector);
+
+  elements.forEach((elem) => {
+    elem.addEventListener("click", (e) => {
+      if (e.target.getAttribute("data-ratio")) {
+        ratio = +e.target.getAttribute("data-ratio");
+        localStorage.setItem("ratio", +e.target.getAttribute("data-ratio"));
+      } else {
+        sex = e.target.getAttribute("id");
+        localStorage.setItem("sex", e.target.getAttribute("id"));
+      }
+
+      elements.forEach((elem) => {
+        elem.classList.remove(activeClass);
+      });
+
+      e.target.classList.add(activeClass);
+
+      calcTotal();
+    });
+  });
+}
+
+getStaticInformation("#gender div", "calculating__choose-item_active");
+getStaticInformation(
+  ".calculating__choose_big div",
+  "calculating__choose-item_active"
+);
+
+function getDynamicInformation(selector) {
+  const input = document.querySelector(selector);
+
+  input.addEventListener("input", () => {
+    if (input.value.match(/\D/g)) {
+      input.style.border = "1px solid red";
+    } else {
+      input.style.border = "none";
+    }
+    switch (input.getAttribute("id")) {
+      case "height":
+        height = +input.value;
+        break;
+      case "weight":
+        weight = +input.value;
+        break;
+      case "age":
+        age = +input.value;
+        break;
+    }
+
+    calcTotal();
+  });
+}
+
+getDynamicInformation("#height");
+getDynamicInformation("#weight");
+getDynamicInformation("#age");
 
 // showSlides(indexSlide);
 
@@ -401,40 +518,39 @@ dotsArr.forEach(dot => {
 //   plusSlides(+1);
 // });
 
-
 // LOCAL STORAGE
 
-const checkbox = document.querySelector('#checkbox');
-const form = document.querySelector('form');
-const change = document.querySelector('#color');
+const checkbox = document.querySelector("#checkbox");
+const form = document.querySelector("form");
+const change = document.querySelector("#color");
 const formLocalStorage = document.querySelector(".form-signin");
 
-if (localStorage.getItem('isChecked')) {
+if (localStorage.getItem("isChecked")) {
   checkbox.checked = true;
 }
 
-checkbox.addEventListener('change', () => {
-  localStorage.setItem('isChecked', true);
-})
+checkbox.addEventListener("change", () => {
+  localStorage.setItem("isChecked", true);
+});
 
-change.addEventListener('click', () => {
-  if (localStorage.getItem('bg') === 'changed') {
+change.addEventListener("click", () => {
+  if (localStorage.getItem("bg") === "changed") {
     formLocalStorage.style.backgroundColor = "white";
   } else {
-    localStorage.setItem('bg', 'changed');
+    localStorage.setItem("bg", "changed");
     formLocalStorage.style.backgroundColor = "red";
   }
-})
+});
 
 const persone = {
-  name: 'Dmitrii',
-  age: 25
+  name: "Dmitrii",
+  age: 25,
 };
 
 const serializedPersone = JSON.stringify(persone);
-localStorage.setItem("alex", persone);
+// localStorage.setItem("alex", persone);
 
-console.log(localStorage.getItem('alex'));
+// console.log(localStorage.getItem('alex'));
 
 ///////////////////////////////////////////// ТЕОРИЯ
 
@@ -727,86 +843,14 @@ console.log(localStorage.getItem('alex'));
 
 // console.log(newArr);
 
-
 // new RegExp('pattern', 'flags');
 // /pattern/flags
 
- const ans = 'Введите ваше имя 1';
+const ans = "Введите ваше имя 1";
 
- const reg = /w/;
+const reg = /w/;
 
- console.log(ans.match(reg));
-
+console.log(ans.match(reg));
 
 // d - только цифры
 // w - только буквы
-
-
-// CALCULATOR 
-
-const result = document.querySelector(".calculating__result span");
-let sex = 'female', height, weight, age, ratio = 1.375;
-
-function calcTotal() {
-  if (!sex || !height || !weight || !age || !ratio) {
-    result.textContent = '____';
-    return;
-  }
-
-  if (sex == 'female') {
-    result.textContent = Math.round((88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age)) * ratio);
-  } else {
-    result.textContent = Math.round((447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age)) * ratio);
-  }
-}
-
-function getStaticInformation(parentSelector, activeClass) {
-  const elements = document.querySelectorAll(`${parentSelector} div`);
-
-  elements.forEach(elem => {
-    elem.addEventListener("click", (e) => {
-      if (e.target.getAttribute("data-ratio")) {
-        ratio = +e.target.getAttribute("data-ratio");
-      } else {
-        sex = e.target.getAttribute("id");
-      }
-
-      elements.forEach((elem) => {
-        elem.classList.remove(activeClass);
-      });
-
-      e.target.classList.add(activeClass);
-
-      calcTotal();
-    });
-  })
-}
-
-getStaticInformation("#gender", "calculating__choose-item_active");
-getStaticInformation(
-  ".calculating__choose_big",
-  "calculating__choose-item_active"
-);
-
-function getDinamicInformation(selector) {
-  const input = document.querySelector(selector)
-
-  input.addEventListener('input', () => {
-    switch(input.getAttribute('id')) { 
-      case 'height': 
-        height = +input.value;
-        break;
-      case 'weight':
-        weight = +input.value;
-        break;
-      case 'age':
-        age = +input.value;
-        break;
-    }
-      calcTotal();
-  });
-};
-
-getDinamicInformation('#height')
-getDinamicInformation('#weight')
-getDinamicInformation('#age')
