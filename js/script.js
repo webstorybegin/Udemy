@@ -289,12 +289,15 @@ slides.forEach((slide) => {
   slide.style.width = widthSlides;
 });
 
+function deleteDigits(string){
+  return +string.replace(/\D/g, '')
+}
+
 prev.addEventListener("click", () => {
   if (offset == 0) {
-    offset =
-      +widthSlides.slice(0, widthSlides.length - 2) * (slides.length - 1);
+    offset = deleteDigits(widthSlides) * (slides.length - 1);
   } else {
-    offset -= +widthSlides.slice(0, widthSlides.length - 2);
+    offset -= deleteDigits(widthSlides);
   }
 
   slidesField.style.transform = `translateX(-${offset}px)`;
@@ -316,13 +319,10 @@ prev.addEventListener("click", () => {
 });
 
 next.addEventListener("click", () => {
-  if (
-    offset ==
-    +widthSlides.slice(0, widthSlides.length - 2) * (slides.length - 1)
-  ) {
+  if (offset == deleteDigits(widthSlides) * (slides.length - 1)) {
     offset = 0;
   } else {
-    offset += +widthSlides.slice(0, widthSlides.length - 2);
+    offset += deleteDigits(widthSlides);
   }
 
   slidesField.style.transform = `translateX(-${offset}px)`;
@@ -348,7 +348,7 @@ dotsArr.forEach(dot => {
     const slideTo = e.target.getAttribute('data-slide-to');
 
     indexSlide = slideTo;
-    offset = +widthSlides.slice(0, widthSlides.length - 2) * (slideTo - 1);
+
     slidesField.style.transform = `translateX(-${offset}px)`;
 
     if (slides.length < 10) {
@@ -726,3 +726,87 @@ console.log(localStorage.getItem('alex'));
 //   .map((item) => item[0]);
 
 // console.log(newArr);
+
+
+// new RegExp('pattern', 'flags');
+// /pattern/flags
+
+ const ans = 'Введите ваше имя 1';
+
+ const reg = /w/;
+
+ console.log(ans.match(reg));
+
+
+// d - только цифры
+// w - только буквы
+
+
+// CALCULATOR 
+
+const result = document.querySelector(".calculating__result span");
+let sex = 'female', height, weight, age, ratio = 1.375;
+
+function calcTotal() {
+  if (!sex || !height || !weight || !age || !ratio) {
+    result.textContent = '____';
+    return;
+  }
+
+  if (sex == 'female') {
+    result.textContent = Math.round((88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age)) * ratio);
+  } else {
+    result.textContent = Math.round((447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age)) * ratio);
+  }
+}
+
+function getStaticInformation(parentSelector, activeClass) {
+  const elements = document.querySelectorAll(`${parentSelector} div`);
+
+  elements.forEach(elem => {
+    elem.addEventListener("click", (e) => {
+      if (e.target.getAttribute("data-ratio")) {
+        ratio = +e.target.getAttribute("data-ratio");
+      } else {
+        sex = e.target.getAttribute("id");
+      }
+
+      elements.forEach((elem) => {
+        elem.classList.remove(activeClass);
+      });
+
+      e.target.classList.add(activeClass);
+
+      calcTotal();
+    });
+  })
+}
+
+getStaticInformation("#gender", "calculating__choose-item_active");
+getStaticInformation(
+  ".calculating__choose_big",
+  "calculating__choose-item_active"
+);
+
+function getDinamicInformation(selector) {
+  const input = document.querySelector(selector)
+
+  input.addEventListener('input', () => {
+    switch(input.getAttribute('id')) { 
+      case 'height': 
+        height = +input.value;
+        break;
+      case 'weight':
+        weight = +input.value;
+        break;
+      case 'age':
+        age = +input.value;
+        break;
+    }
+      calcTotal();
+  });
+};
+
+getDinamicInformation('#height')
+getDinamicInformation('#weight')
+getDinamicInformation('#age')
